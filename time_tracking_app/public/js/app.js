@@ -38,7 +38,7 @@ class TimersDashboard extends React.Component {
         }else
           return timer;
       })
-    })
+    });
   }
   handleCreateFormSubmit=(timer)=>{
       this.createTimer(timer);
@@ -49,6 +49,24 @@ class TimersDashboard extends React.Component {
           timers:this.state.timers.concat(t),
       });
   };
+  handleDeleteClick=(id)=>{
+    console.log("was here with id: "+id);
+    this.setState({
+      timers: this.state.timers.filter((timer)=>{
+        return (timer.id!=id);
+      })
+      /*((timer)=>{
+        if(timer.id==attrs.id){
+          return Object.assign({},timer,
+          {
+            title: attrs.title,
+            project: attrs.project,
+          })
+        }else
+          return timer;
+      })*/
+    });
+  }
   render() {
     return (
       <div className='ui three column centered grid'>
@@ -56,6 +74,7 @@ class TimersDashboard extends React.Component {
           <EditableTimerList 
           timers={this.state.timers}
           onFormSubmit={this.handleEditFormSubmit}
+          handleDeleteClick={this.handleDeleteClick}
           />
           <ToggleableTimerForm
             onFormSubmit={this.handleCreateFormSubmit}
@@ -116,30 +135,13 @@ class EditableTimerList extends React.Component {
         elapsed={timer.elapsed}
         runningSince={timer.runningSince}
         onFormSubmit={this.props.onFormSubmit}
+        handleDeleteClick={this.props.handleDeleteClick}
         />));
         return(
             <div id='timers'>
                 {timers}
             </div>
         )
-    return (
-      <div id='timers'>
-        <EditableTimer
-          title='Learn React'
-          project='Web Domination'
-          elapsed='8986300'
-          runningSince={null}
-          editFormOpen={false}
-        />
-        <EditableTimer
-          title='Learn extreme ironing'
-          project='World Domination'
-          elapsed='3890985'
-          runningSince={null}
-          editFormOpen={true}
-        />
-      </div>
-    );
   }
 }
 
@@ -183,6 +185,7 @@ class EditableTimer extends React.Component {
               elapsed={this.props.elapsed}
               runningSince={this.props.runningSince}
               onEditClick={this.handleEditClick}
+              handleDeleteClick={this.props.handleDeleteClick}
             />
         );
         }
@@ -190,6 +193,10 @@ class EditableTimer extends React.Component {
 }
 
 class Timer extends React.Component {
+  onDeleteClick=()=>{
+    console.log("was here");
+    this.props.handleDeleteClick(this.props.id);
+  }
   render() {
     const elapsedString = helpers.renderElapsedString(this.props.elapsed);
     return (
@@ -213,7 +220,10 @@ class Timer extends React.Component {
             >
               <i className='edit icon' />
             </span>
-            <span className='right floated trash icon'>
+            <span 
+              className='right floated trash icon'
+              onClick={this.onDeleteClick}
+            >
               <i className='trash icon' />
             </span>
           </div>
