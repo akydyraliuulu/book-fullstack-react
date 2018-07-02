@@ -34,6 +34,8 @@ class TimersDashboard extends React.Component {
 	}
 	handleEditFormSubmit=(attrs)=>{
 		this.updateTimer(attrs);
+		console.log("timer update: "+JSON.stringify(attrs));
+		client.updateTimer(attrs);
 	}
 	updateTimer=(attrs)=>{
 		this.setState({
@@ -51,6 +53,11 @@ class TimersDashboard extends React.Component {
 	}
 	handleCreateFormSubmit=(timer)=>{
 		this.createTimer(timer);
+		console.log("timer create: "+JSON.stringify(timer));
+		client.createTimer(timer);
+		/*id:this.props.id,
+		title:this.state.title,
+		project:this.state.project,*/
 	};
 	createTimer=(timer)=>{
 		const t = helpers.newTimer(timer);
@@ -58,13 +65,14 @@ class TimersDashboard extends React.Component {
 			timers:this.state.timers.concat(t),
 		});
 	};
-	handleDeleteClick=(id)=>{
+	handleDeleteClick=(timerId)=>{
 		//console.log("was here with id: "+id);
 		this.setState({
 			timers: this.state.timers.filter((timer)=>{
-				return (timer.id!=id);
+				return (timer.id!=timerId);
 			})
 		});
+		client.deleteTimer({id: timerId});
 	}
 	handleStopClick=(timerId)=>{
 		this.stopTimer(timerId);
@@ -319,8 +327,9 @@ class TimerForm extends React.Component {
 		this.setState({title:e.target.value});
 	};
 	handleSubmit=()=>{
+		const realid = (this.props.id) ? this.props.id : uuid.v4();
 		this.props.onFormSubmit({
-			id:this.props.id,
+			id: realid,
 			title:this.state.title,
 			project:this.state.project,
 		});

@@ -42,6 +42,7 @@ window.client = (function () {
         'Content-Type': 'application/json',
       },
     }).then(checkStatus);
+
   }
 
   function startTimer(data) {
