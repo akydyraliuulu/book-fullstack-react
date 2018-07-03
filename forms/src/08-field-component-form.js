@@ -45,6 +45,10 @@ module.exports = class extends React.Component {
 		this.setState({ fields, fieldErrors });
 	};
 
+	/**
+	 * validation at the form level
+	 * @return true iff there's some error
+	 */
 	validate = () => {
 		const person = this.state.fields;
 		const fieldErrors = this.state.fieldErrors;
@@ -60,41 +64,41 @@ module.exports = class extends React.Component {
 	render() {
 		return (
 			<div>
-			<h1>Sign Up Sheet</h1>
+				<h1>Sign Up Sheet</h1>
 
-			<form onSubmit={this.onFormSubmit}>
+				<form onSubmit={this.onFormSubmit}>
 
-			<Field
-			placeholder='Name'
-			name='name'
-			value={this.state.fields.name}
-			onChange={this.onInputChange}
-			validate={(val) => (val ? false : 'Name Required')}
-			/>
+					<Field
+						placeholder='Name'
+						name='name'
+						value={this.state.fields.name}
+						onChange={this.onInputChange}
+						validate={(val) => (val ? false : 'Name Required')}
+					/>
 
-			<br />
+					<br />
 
-			<Field
-			placeholder='Email'
-			name='email'
-			value={this.state.fields.email}
-			onChange={this.onInputChange}
-			validate={(val) => (isEmail(val) ? false : 'Invalid Email')}
-			/>
+					<Field
+						placeholder='Email'
+						name='email'
+						value={this.state.fields.email}
+						onChange={this.onInputChange}
+						validate={(val) => (isEmail(val) ? false : 'Invalid Email')}
+					/>
 
-			<br />
+					<br />
 
-			<input type='submit' disabled={this.validate()} />
-			</form>
+					<input type='submit' disabled={this.validate()} />
+				</form>
 
-			<div>
-			<h3>People</h3>
-			<ul>
-			{ this.state.people.map(({ name, email }, i) =>
-				<li key={i}>{name} ({email})</li>
-			) }
-			</ul>
-			</div>
+				<div>
+					<h3>People</h3>
+					<ul>
+						{ this.state.people.map(({ name, email }, i) =>
+							<li key={i}>{name} ({email})</li>
+						) }
+					</ul>
+				</div>
 			</div>
 		);
 	}
